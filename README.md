@@ -1,3 +1,3 @@
-# BALEZVerb
+# BALEZverb
 
 Le reverb des balèzes.
