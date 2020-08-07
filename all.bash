@@ -6,7 +6,7 @@ PLUGINS=BALEZverb
 # packaging will come later. This script performs destructive
 # operations on this directory, make sure it is made for this
 # use. In case of doubt, do not edit it.
-INSTALL_DIR=~/Library/Audio/Plug-Ins/VST3/BALEZ
+INSTALL_DIR=~/Library/Audio/Plug-Ins/Components
 
 # params: <message>
 function ok {
@@ -75,8 +75,6 @@ case $1 in
     "clean")
 	title "cleaning BALEZ suite"
 
-	rm -rf ${INSTALL_DIR}/*
-
 	for plugin in ${PLUGINS}; do
 	    (
 		ok "cleaning ${plugin}"
@@ -91,10 +89,11 @@ case $1 in
 	title "installing BALEZ suite"
 
 	mkdir -p ${INSTALL_DIR}
-	rm -rf ${INSTALL_DIR}/*
 
 	for plugin in ${PLUGINS}; do
-	    cp -r "$(find src/${plugin}/build -name '*.vst3')" ${INSTALL_DIR}/
+	    COMPONENT="$(find src/${plugin}/build -name '*.component')"
+	    rm -rf "${INSTALL_DIR}/${COMPONENT}"
+	    cp -r "${COMPONENT}" ${INSTALL_DIR}/
 	    ok "installed ${plugin}"
 	done
 
