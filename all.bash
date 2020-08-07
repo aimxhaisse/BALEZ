@@ -2,6 +2,12 @@
 
 PLUGINS=BALEZverb
 
+# Fow now, only a local VST3 install on Mac OSX is supported,
+# packaging will come later. This script performs destructive
+# operations on this directory, make sure it is made for this
+# use. In case of doubt, do not edit it.
+INSTALL_DIR=~/Library/Audio/Plug-Ins/VST3/BALEZ
+
 # params: <message>
 function ok {
     echo -e "\033[0;32;49m$@\\033[0m"
@@ -39,7 +45,7 @@ function be-quiet {
 
 # params: <none>
 function usage {
-    echo -e "usage: $0 [help|build|install]"
+    echo -e "usage: $0 [help|build|clean|install]"
 }
 
 case $1 in
@@ -58,8 +64,23 @@ case $1 in
 	for plugin in ${PLUGINS}; do
 	    (
 		ok "building ${plugin}"
-		cd src/$plugin
+		cd src/${plugin}
 		cmake -B build && cmake --build build --config Release
+	    )
+	done
+
+	exit 0
+	;;
+
+    "clean")
+	title "cleaning BALEZ suite"
+
+	rm -rf ${INSTALL_DIR}/*
+
+	for plugin in ${PLUGINS}; do
+	    (
+		ok "cleaning ${plugin}"
+		rm -rf src/${plugin}/build
 	    )
 	done
 
@@ -68,6 +89,15 @@ case $1 in
 
     "install")
 	title "installing BALEZ suite"
+
+	mkdir -p ${INSTALL_DIR}
+	rm -rf ${INSTALL_DIR}/*
+
+	for plugin in ${PLUGINS}; do
+	    cp -r "$(find src/${plugin}/build -name '*.vst3')" ${INSTALL_DIR}/
+	    ok "installed ${plugin}"
+	done
+
 	exit 0
 	;;
 
