@@ -1,7 +1,12 @@
 #include "BALEZverb_processor.h"
 #include "BALEZverb_editor.h"
 
-BalezVerbProcessor::BalezVerbProcessor() : AudioProcessor(BusesProperties()) {}
+BalezVerbProcessor::BalezVerbProcessor()
+    : AudioProcessor(
+          BusesProperties()
+              .withInput("Input", juce::AudioChannelSet::stereo())
+              .withOutput("Output", juce::AudioChannelSet::stereo())
+              .withInput("Sidechain", juce::AudioChannelSet::stereo())) {}
 
 BalezVerbProcessor::~BalezVerbProcessor() {}
 
@@ -85,7 +90,6 @@ void BalezVerbProcessor::processBlock(juce::AudioBuffer<float> &buffer,
   // interleaved by keeping the same state.
   for (int channel = 0; channel < totalNumInputChannels; ++channel) {
     auto *channelData = buffer.getWritePointer(channel);
-    juce::ignoreUnused(channelData);
     // ..do something to the data...
   }
 }
@@ -100,7 +104,6 @@ void BalezVerbProcessor::getStateInformation(juce::MemoryBlock &destData) {
   // You should use this method to store your parameters in the memory block.
   // You could do that either as raw data, or use the XML or ValueTree classes
   // as intermediaries to make it easy to save and load complex data.
-  juce::ignoreUnused(destData);
 }
 
 void BalezVerbProcessor::setStateInformation(const void *data,
@@ -108,7 +111,6 @@ void BalezVerbProcessor::setStateInformation(const void *data,
   // You should use this method to restore your parameters from this memory
   // block, whose contents will have been created by the getStateInformation()
   // call.
-  juce::ignoreUnused(data, sizeInBytes);
 }
 
 // This creates new instances of the plugin.
