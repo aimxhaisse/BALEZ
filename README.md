@@ -1,3 +1,3 @@
-# BALEZverb
+# BALEZ
 
-Le reverb des balèzes.
+Suite de plugins audio pour les balezes.
