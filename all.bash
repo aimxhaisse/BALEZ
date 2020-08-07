@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+PLUGINS=BALEZverb
+
 # params: <message>
 function ok {
     echo -e "\033[0;32;49m$@\\033[0m"
@@ -14,7 +16,7 @@ function ko {
 
 # params: <message>
 function title {
-    echo -e "\033[0;32;40m$@\\033[0m"
+    echo -e "\033[0;32;40m$@\\033[0m\n"
     return 0
 }
 
@@ -43,17 +45,29 @@ function usage {
 case $1 in
 
     "help")
+	title "help for BALEZ suite"
 	usage
 	exit 0
 	;;
 
     "build")
-	title "building VSTs"
+	title "building BALEZ suite"
+
+	git submodule update --init --recursive
+
+	for plugin in ${PLUGINS}; do
+	    (
+		ok "building ${plugin}"
+		cd src/$plugin
+		cmake -B build && cmake --build build --config Release
+	    )
+	done
+
 	exit 0
 	;;
 
     "install")
-	title "installing VSTs"
+	title "installing BALEZ suite"
 	exit 0
 	;;
 
