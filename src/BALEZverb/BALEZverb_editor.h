@@ -2,19 +2,6 @@
 
 #include "BALEZverb_processor.h"
 
-/*
- * BALEZverb's inteface:
- *
- *  +--------------------+
- *  |    BALEZ HEADER    | 40
- *  +--------------------+
- *  |  O  O  O  O  O  O  | 80
- *  |  R  D  W  D  W  F  |
- *  +--------------------+
- *  |    BALEZ FOOTER    | 40
- *  +--------------------+
- *
- */
 class BalezVerbEditor : public juce::AudioProcessorEditor,
                         public juce::Slider::Listener {
 public:
