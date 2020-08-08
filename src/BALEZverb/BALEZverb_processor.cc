@@ -115,6 +115,12 @@ void BalezVerbProcessor::setStateInformation(const void *data,
   // call.
 }
 
+void BalezVerbProcessor::setParameters(const juce::Reverb::Parameters &params) {
+  for (int i = 0; i < kNumberChans; ++i) {
+    reverbs_[i].setParameters(params);
+  }
+}
+
 // This creates new instances of the plugin.
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
   return new BalezVerbProcessor();

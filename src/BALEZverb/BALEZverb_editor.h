@@ -15,13 +15,15 @@
  *  +--------------------+
  *
  */
-class BalezVerbEditor : public juce::AudioProcessorEditor {
+class BalezVerbEditor : public juce::AudioProcessorEditor,
+                        public juce::Slider::Listener {
 public:
   explicit BalezVerbEditor(BalezVerbProcessor &proc);
   ~BalezVerbEditor() override;
 
   void paint(juce::Graphics &gfx) override;
   void resized() override;
+  void sliderValueChanged(juce::Slider *slider) override;
 
   static constexpr int kDialCount = 6;
 

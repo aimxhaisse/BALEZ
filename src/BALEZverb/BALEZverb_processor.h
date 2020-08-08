@@ -16,11 +16,9 @@ public:
 
   void processBlock(juce::AudioBuffer<float> &, juce::MidiBuffer &) override;
 
-  // Editor.
   juce::AudioProcessorEditor *createEditor() override;
   bool hasEditor() const override;
 
-  // Midi config.
   bool acceptsMidi() const override;
   bool producesMidi() const override;
   bool isMidiEffect() const override;
@@ -35,6 +33,8 @@ public:
 
   void getStateInformation(juce::MemoryBlock &destData) override;
   void setStateInformation(const void *data, int sizeInBytes) override;
+
+  void setParameters(const juce::Reverb::Parameters &params);
 
 private:
   static constexpr int kNumberChans = 2;

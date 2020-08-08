@@ -16,6 +16,15 @@ constexpr int kDialHeight = kDialWidth + kDialTextHeight;
 constexpr int kSizeWidth = BalezVerbEditor::kDialCount * kDialWidth;
 constexpr int kSizeHeight = kHeaderHeight + kFooterHeight + kDialHeight;
 
+enum {
+  CONFIG_ROOM = 0,
+  CONFIG_DAMPING = 1,
+  CONFIG_WET = 2,
+  CONFIG_DRY = 3,
+  CONFIG_WIDTH = 4,
+  CONFIG_FREEZE = 5
+};
+
 } // namespace
 
 BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
@@ -31,6 +40,8 @@ BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
   for (int i = 0; i < kDialCount; ++i) {
     dials_[i].setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
     dials_[i].setSliderStyle(juce::Slider::Rotary);
+    dials_[i].setRange(0.0, 1.0, 0.001);
+    dials_[i].addListener(this);
     addAndMakeVisible(dials_[i]);
 
     descriptions_[i].setColour(juce::Colours::white);
@@ -39,12 +50,19 @@ BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
     addAndMakeVisible(descriptions_[i]);
   }
 
-  descriptions_[0].setText("room");
-  descriptions_[1].setText("damping");
-  descriptions_[2].setText("wet");
-  descriptions_[3].setText("dry");
-  descriptions_[4].setText("width");
-  descriptions_[5].setText("freeze");
+  descriptions_[CONFIG_ROOM].setText("room");
+  descriptions_[CONFIG_DAMPING].setText("damping");
+  descriptions_[CONFIG_WET].setText("wet");
+  descriptions_[CONFIG_DRY].setText("dry");
+  descriptions_[CONFIG_WIDTH].setText("width");
+  descriptions_[CONFIG_FREEZE].setText("freeze");
+
+  dials_[CONFIG_ROOM].setValue(0.5f);
+  dials_[CONFIG_DAMPING].setValue(0.5f);
+  dials_[CONFIG_WET].setValue(0.33f);
+  dials_[CONFIG_DRY].setValue(0.4f);
+  dials_[CONFIG_WIDTH].setValue(1.0f);
+  dials_[CONFIG_FREEZE].setValue(0.0f);
 
   footer_.setColour(juce::Colours::white);
   footer_.setFont(juce::Font(10.0f, juce::Font::plain), true);
@@ -76,4 +94,17 @@ void BalezVerbEditor::resized() {
   footer_.setBoundingBox(juce::Rectangle<float>(
       kPaddingWidth, kHeaderHeight + kDialHeight + kPaddingHeight,
       kSizeWidth - 2 * kPaddingWidth, kFooterHeight - 2 * kPaddingHeight));
+}
+
+void BalezVerbEditor::sliderValueChanged(juce::Slider *slider) {
+  juce::Reverb::Parameters params;
+
+  params.roomSize = dials_[CONFIG_ROOM].getValue();
+  params.damping = dials_[CONFIG_DAMPING].getValue();
+  params.wetLevel = dials_[CONFIG_WET].getValue();
+  params.dryLevel = dials_[CONFIG_DRY].getValue();
+  params.width = dials_[CONFIG_WIDTH].getValue();
+  params.freezeMode = dials_[CONFIG_FREEZE].getValue();
+
+  proc_.setParameters(params);
 }
