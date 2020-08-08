@@ -3,6 +3,8 @@
 
 namespace {
 
+constexpr int kPadding = 25;
+
 constexpr int kSizeWidth = 800;
 constexpr int kSizeHeight = 600;
 
@@ -18,6 +20,10 @@ BalezVerbEditor::~BalezVerbEditor() {}
 void BalezVerbEditor::paint(juce::Graphics &g) {
   g.fillAll(
       getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+
+  g.setColour(juce::Colours::white);
+  g.setFont(10.0f);
+  g.drawSingleLineText(__DATE__ " - " __TIME__, kPadding, kPadding);
 
   g.setColour(juce::Colours::white);
   g.setFont(15.0f);

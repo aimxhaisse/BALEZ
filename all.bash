@@ -2,7 +2,7 @@
 
 PLUGINS=BALEZverb
 
-# Fow now, only a local VST3 install on Mac OSX is supported,
+# Fow now, only a local AU install on Mac OSX is supported,
 # packaging will come later. This script performs destructive
 # operations on this directory, make sure it is made for this
 # use. In case of doubt, do not edit it.
@@ -64,8 +64,8 @@ case $1 in
 	for plugin in ${PLUGINS}; do
 	    (
 		ok "building ${plugin}"
-		cd src/${plugin}
-		cmake -B build && cmake --build build --config Release
+		mkdir -p src/${plugin}/build && cd src/${plugin}/build
+		cmake .. && make -j5
 	    )
 	done
 
@@ -91,11 +91,17 @@ case $1 in
 	mkdir -p ${INSTALL_DIR}
 
 	for plugin in ${PLUGINS}; do
-	    COMPONENT="$(find src/${plugin}/build -name '*.component')"
-	    if [ ! -z "${COMPONENT}" ]; then
-		rm -rf "${INSTALL_DIR}/${COMPONENT}"
+	    (
+		ok "re-building ${plugin} to reload AU cache"
+		mkdir -p src/${plugin}/build && cd src/${plugin}/build
+		cmake .. -DFORCE_CACHE_VERSION=1 && make -j5
+	    )
+
+	    AU="$(find src/${plugin}/build -name '*.component')"
+	    if [ ! -z "${AU}" ]; then
+		rsync -avhz --delete $AU ${INSTALL_DIR}/
 	    fi
-	    cp -r "${COMPONENT}" ${INSTALL_DIR}/
+
 	    ok "installed ${plugin}"
 	done
 
