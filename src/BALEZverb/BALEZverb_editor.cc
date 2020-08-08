@@ -10,25 +10,29 @@ constexpr int kSizeHeight = 600;
 
 } // namespace
 
-BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &p)
-    : AudioProcessorEditor(&p), proc_(p) {
+BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
+    : AudioProcessorEditor(&proc), proc_(proc) {
   setSize(kSizeWidth, kSizeHeight);
 }
 
 BalezVerbEditor::~BalezVerbEditor() {}
 
-void BalezVerbEditor::paint(juce::Graphics &g) {
-  g.fillAll(
+void BalezVerbEditor::paintBuildDate(juce::Graphics &gfx) {
+  gfx.setColour(juce::Colours::white);
+  gfx.setFont(10.0f);
+  gfx.drawSingleLineText(__DATE__ " - " __TIME__, kPadding, kPadding);
+}
+
+void BalezVerbEditor::paint(juce::Graphics &gfx) {
+  gfx.fillAll(
       getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 
-  g.setColour(juce::Colours::white);
-  g.setFont(10.0f);
-  g.drawSingleLineText(__DATE__ " - " __TIME__, kPadding, kPadding);
+  paintVersion(gfx);
 
-  g.setColour(juce::Colours::white);
-  g.setFont(15.0f);
-  g.drawFittedText("BALEZverb - Le reverb des BALEZES", getLocalBounds(),
-                   juce::Justification::centred, 1);
+  gfx.setColour(juce::Colours::white);
+  gfx.setFont(15.0f);
+  gfx.drawFittedText("BALEZverb - Le reverb des BALEZES", getLocalBounds(),
+                     juce::Justification::centred, 1);
 }
 
 void BalezVerbEditor::resized() {}
