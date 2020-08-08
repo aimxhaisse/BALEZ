@@ -2,6 +2,19 @@
 
 #include "BALEZverb_processor.h"
 
+/*
+ * BALEZverb's inteface:
+ *
+ *  +--------------------+
+ *  |    BALEZ HEADER    | 40
+ *  +--------------------+
+ *  |  O  O  O  O  O  O  | 80
+ *  |  R  D  W  D  W  F  |
+ *  +--------------------+
+ *  |    BALEZ FOOTER    | 40
+ *  +--------------------+
+ *
+ */
 class BalezVerbEditor : public juce::AudioProcessorEditor {
 public:
   explicit BalezVerbEditor(BalezVerbProcessor &proc);
@@ -10,8 +23,15 @@ public:
   void paint(juce::Graphics &gfx) override;
   void resized() override;
 
+  static constexpr int kDialCount = 6;
+
 private:
-  void paintBuildDate(juce::Graphics &gfx);
+  juce::DrawableText header_;
+  juce::DrawableText footer_;
+
+  juce::Slider dials_[kDialCount];
+  juce::DrawableText descriptions_[kDialCount];
+  float values_[kDialCount];
 
   BalezVerbProcessor &proc_;
 };
