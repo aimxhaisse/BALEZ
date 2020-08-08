@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(BALEZ_verb VERSION 0.0.1)
+project(BALEZ_verb VERSION 0.0.3)
 add_subdirectory(../../lib/JUCE lib/JUCE)
 
 juce_add_plugin(BALEZverb

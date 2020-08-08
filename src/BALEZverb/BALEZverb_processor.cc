@@ -1,5 +1,7 @@
-#include "BALEZverb_processor.h"
+#include <juce_audio_basics/juce_audio_basics.h>
+
 #include "BALEZverb_editor.h"
+#include "BALEZverb_processor.h"
 
 BalezVerbProcessor::BalezVerbProcessor()
     : AudioProcessor(
@@ -45,32 +47,38 @@ void BalezVerbProcessor::changeProgramName(int index,
 void BalezVerbProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
   // Use this method as the place to do any pre-playback
   // initialisation that you need..
-  juce::ignoreUnused(sampleRate, samplesPerBlock);
+  juce::ignoreUnused(samplesPerBlock);
+
+  for (int i = 0; i < kNumberChans; ++i) {
+    reverbs_[i].setSampleRate(sampleRate);
+  }
 }
 
 void BalezVerbProcessor::releaseResources() {
   // When playback stops, you can use this as an opportunity to free up any
   // spare memory, etc.
+
+  for (int i = 0; i < kNumberChans; ++i) {
+    reverbs_[i].reset();
+  }
 }
 
 bool BalezVerbProcessor::isBusesLayoutSupported(
     const BusesLayout &layouts) const {
-  // This is the place where you check if the layout is supported.
-  // In this template code we only support mono or stereo.
-  if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() &&
-      layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
-    return false;
+  if (layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo()) {
+    return true;
+  }
 
-  return true;
+  return false;
 }
 
 void BalezVerbProcessor::processBlock(juce::AudioBuffer<float> &buffer,
-                                      juce::MidiBuffer &midiMessages) {
-  juce::ignoreUnused(midiMessages);
+                                      juce::MidiBuffer &midi_msgs) {
+  juce::ignoreUnused(midi_msgs);
+  juce::ScopedNoDenormals no_denormals;
 
-  juce::ScopedNoDenormals noDenormals;
-  auto totalNumInputChannels = getTotalNumInputChannels();
-  auto totalNumOutputChannels = getTotalNumOutputChannels();
+  const int input_chans = getTotalNumInputChannels();
+  const int output_chans = getTotalNumOutputChannels();
 
   // In case we have more outputs than inputs, this code clears any output
   // channels that didn't contain input data, (because these aren't
@@ -78,19 +86,13 @@ void BalezVerbProcessor::processBlock(juce::AudioBuffer<float> &buffer,
   // This is here to avoid people getting screaming feedback
   // when they first compile a plugin, but obviously you don't need to keep
   // this code if your algorithm always overwrites all the output channels.
-  for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i) {
-    buffer.clear(i, 0, buffer.getNumSamples());
+  for (int chan = input_chans; chan < output_chans; ++chan) {
+    buffer.clear(chan, 0, buffer.getNumSamples());
   }
 
-  // This is the place where you'd normally do the guts of your plugin's
-  // audio processing...
-  // Make sure to reset the state if your inner loop is processing
-  // the samples and the outer loop is handling the channels.
-  // Alternatively, you can process the samples with the channels
-  // interleaved by keeping the same state.
-  for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-    auto *channelData = buffer.getWritePointer(channel);
-    // ..do something to the data...
+  for (int chan = 0; chan < kNumberChans; ++chan) {
+    auto *data = buffer.getWritePointer(chan);
+    reverbs_[chan].processMono(data, buffer.getNumSamples());
   }
 }
 

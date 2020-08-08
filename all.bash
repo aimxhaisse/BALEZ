@@ -92,7 +92,9 @@ case $1 in
 
 	for plugin in ${PLUGINS}; do
 	    COMPONENT="$(find src/${plugin}/build -name '*.component')"
-	    rm -rf "${INSTALL_DIR}/${COMPONENT}"
+	    if [ ! -z "${COMPONENT}" ]; then
+		rm -rf "${INSTALL_DIR}/${COMPONENT}"
+	    fi
 	    cp -r "${COMPONENT}" ${INSTALL_DIR}/
 	    ok "installed ${plugin}"
 	done
