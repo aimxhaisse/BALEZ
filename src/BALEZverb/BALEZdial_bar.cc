@@ -16,9 +16,13 @@ BalezDial &BalezDialBar::getDial(int index) {
   return *(dials_.find(index)->second);
 }
 
-void BalezDialBar::setUp(juce::AudioProcessorEditor *proc) {
+void BalezDialBar::setUp(juce::AudioProcessorEditor &editor) {
   for (auto &iter : dials_) {
-    iter.second->setUp(proc);
+    juce::AudioProcessorParameter *parameter =
+        editor.getAudioProcessor()->getParameters().getReference(iter.first);
+    iter.second->bindParameter(
+        *dynamic_cast<juce::RangedAudioParameter *>(parameter));
+    iter.second->setUp(editor);
   }
 }
 

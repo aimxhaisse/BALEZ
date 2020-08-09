@@ -20,6 +20,14 @@ public:
   const juce::String getProgramName(int) override { return {}; }
   void changeProgramName(int, const juce::String &) override {}
 
-  void getStateInformation(juce::MemoryBlock &destData) override {}
-  void setStateInformation(const void *data, int sizeInBytes) override {}
+  void getStateInformation(juce::MemoryBlock &dest) override {}
+  void setStateInformation(const void *data, int size) override {}
+
+  float getParameterValue(int index) {
+    return getParameters().getReference(index)->getValue();
+  }
+
+  void setParameterValue(int index, float value) {
+    return getParameters().getReference(index)->setValue(value);
+  }
 };

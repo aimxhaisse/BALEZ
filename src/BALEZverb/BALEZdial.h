@@ -28,10 +28,10 @@ public:
   void setName(const juce::String &name);
   void setInitialPosition(int x, int y);
   void setIndex(int idx);
-  void bindParameter(juce::AudioParameterFloat *parameter);
+  void bindParameter(juce::RangedAudioParameter &parameter);
 
   void sliderValueChanged(juce::Slider *slider);
-  void setUp(juce::AudioProcessorEditor *proc);
+  void setUp(juce::AudioProcessorEditor &editor);
   void resized();
 
 private:
@@ -45,5 +45,5 @@ private:
   std::unique_ptr<juce::DrawableText> description_;
 
   // This is owned by the processor thread.
-  juce::AudioParameterFloat *parameter_ = nullptr;
+  juce::RangedAudioParameter *parameter_ = nullptr;
 };

@@ -8,7 +8,20 @@ BalezVerbProcessor::BalezVerbProcessor()
           BusesProperties()
               .withInput("Input", juce::AudioChannelSet::stereo())
               .withOutput("Output", juce::AudioChannelSet::stereo())
-              .withInput("Sidechain", juce::AudioChannelSet::stereo())) {}
+              .withInput("Sidechain", juce::AudioChannelSet::stereo())) {
+  addParameter(
+      new juce::AudioParameterFloat("REVERBRoom", "room", 0.0, 1.0, 0.5));
+  addParameter(
+      new juce::AudioParameterFloat("REVERBDamping", "damping", 0.0, 1.0, 0.5));
+  addParameter(
+      new juce::AudioParameterFloat("REVERBWetLevel", "wet", 0.0, 1.0, 0.33));
+  addParameter(
+      new juce::AudioParameterFloat("REVERBDryLevel", "dry", 0.0, 1.0, 0.4));
+  addParameter(
+      new juce::AudioParameterFloat("REVERBWidth", "width", 0.0, 1.0, 1.0));
+  addParameter(
+      new juce::AudioParameterFloat("REVERBFreeze", "freeze", 0.0, 1.0, 0.5));
+}
 
 BalezVerbProcessor::~BalezVerbProcessor() {}
 
@@ -49,6 +62,7 @@ void BalezVerbProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     buffer.clear(chan, 0, buffer.getNumSamples());
   }
 
+  std::lock_guard<std::mutex> lk(mutex_);
   for (int chan = 0; chan < kNumberChans; ++chan) {
     auto *data = buffer.getWritePointer(chan);
     reverbs_[chan].processMono(data, buffer.getNumSamples());
@@ -59,13 +73,24 @@ juce::AudioProcessorEditor *BalezVerbProcessor::createEditor() {
   return new BalezVerbEditor(*this);
 }
 
-void BalezVerbProcessor::setParameters(const juce::Reverb::Parameters &params) {
-  for (int i = 0; i < kNumberChans; ++i) {
-    reverbs_[i].setParameters(params);
+void BalezVerbProcessor::reloadParameters() {
+  juce::Reverb::Parameters params;
+
+  params.roomSize = getParameterValue(PARAM_ROOM);
+  params.damping = getParameterValue(PARAM_DAMPING);
+  params.wetLevel = getParameterValue(PARAM_WET);
+  params.dryLevel = getParameterValue(PARAM_DRY);
+  params.width = getParameterValue(PARAM_WIDTH);
+  params.freezeMode = getParameterValue(PARAM_FREEZE);
+
+  {
+    std::lock_guard<std::mutex> lk(mutex_);
+    for (int i = 0; i < kNumberChans; ++i) {
+      reverbs_[i].setParameters(params);
+    }
   }
 }
 
-// This creates new instances of the plugin.
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
   return new BalezVerbProcessor();
 }
