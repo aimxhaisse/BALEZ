@@ -33,6 +33,5 @@ public:
 private:
   static constexpr int kNumberChans = 2;
 
-  std::mutex mutex_;
   juce::Reverb reverbs_[kNumberChans];
 };

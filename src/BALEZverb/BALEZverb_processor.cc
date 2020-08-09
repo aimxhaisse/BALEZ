@@ -66,7 +66,6 @@ void BalezVerbProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     buffer.clear(chan, 0, buffer.getNumSamples());
   }
 
-  std::lock_guard<std::mutex> lk(mutex_);
   for (int chan = 0; chan < kNumberChans; ++chan) {
     auto *data = buffer.getWritePointer(chan);
     reverbs_[chan].processMono(data, buffer.getNumSamples());
@@ -87,11 +86,8 @@ void BalezVerbProcessor::reloadParameters() {
   params.width = getParameterValue(PARAM_WIDTH);
   params.freezeMode = getParameterValue(PARAM_FREEZE);
 
-  {
-    std::lock_guard<std::mutex> lk(mutex_);
-    for (int i = 0; i < kNumberChans; ++i) {
-      reverbs_[i].setParameters(params);
-    }
+  for (int i = 0; i < kNumberChans; ++i) {
+    reverbs_[i].setParameters(params);
   }
 }
 
