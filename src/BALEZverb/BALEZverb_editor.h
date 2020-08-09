@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <utility>
+
 #include "BALEZverb_processor.h"
 
 class BalezVerbEditor : public juce::AudioProcessorEditor,
@@ -20,7 +23,6 @@ private:
 
   juce::Slider dials_[kDialCount];
   juce::DrawableText descriptions_[kDialCount];
-  float values_[kDialCount];
 
   BalezVerbProcessor &proc_;
 };
