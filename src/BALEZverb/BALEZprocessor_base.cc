@@ -23,9 +23,24 @@ const juce::String BalezProcessorBase::getProgramName(int) { return {}; }
 
 void BalezProcessorBase::changeProgramName(int, const juce::String &) {}
 
-void BalezProcessorBase::getStateInformation(juce::MemoryBlock &dest) {}
+void BalezProcessorBase::getStateInformation(juce::MemoryBlock &dest) {
+  std::unique_ptr<juce::XmlElement> xml(new juce::XmlElement("BALEZplug-in"));
+  for (auto &param : getParameters()) {
+    xml->setAttribute(param->getName(512),
+                      static_cast<double>(param->getValue()));
+  }
+  copyXmlToBinary(*xml, dest);
+}
 
-void BalezProcessorBase::setStateInformation(const void *data, int size) {}
+void BalezProcessorBase::setStateInformation(const void *data, int size) {
+  std::unique_ptr<juce::XmlElement> xml(getXmlFromBinary(data, size));
+  if (xml.get() && xml->hasTagName("BALEZplug-in")) {
+    for (auto &param : getParameters()) {
+      param->setValue(
+          xml->getDoubleAttribute(param->getName(512), param->getValue()));
+    }
+  }
+}
 
 void BalezProcessorBase::parameterValueChanged(int idx, float value) {}
 
