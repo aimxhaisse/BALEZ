@@ -21,6 +21,10 @@ BalezVerbProcessor::BalezVerbProcessor()
       new juce::AudioParameterFloat("REVERBWidth", "width", 0.0, 1.0, 1.0));
   addParameter(
       new juce::AudioParameterFloat("REVERBFreeze", "freeze", 0.0, 1.0, 0.5));
+
+  for (auto &parameter : getParameters()) {
+    parameter->addListener(this);
+  }
 }
 
 BalezVerbProcessor::~BalezVerbProcessor() {}
@@ -89,6 +93,12 @@ void BalezVerbProcessor::reloadParameters() {
       reverbs_[i].setParameters(params);
     }
   }
+}
+
+void BalezVerbProcessor::parameterValueChanged(int idx, float value) {
+  setParameterValue(idx, value);
+
+  reloadParameters();
 }
 
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {

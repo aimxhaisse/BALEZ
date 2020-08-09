@@ -28,6 +28,7 @@ public:
   void releaseResources() override;
   bool isBusesLayoutSupported(const BusesLayout &layouts) const override;
   void processBlock(juce::AudioBuffer<float> &, juce::MidiBuffer &) override;
+  void parameterValueChanged(int idx, float value) override;
 
 private:
   static constexpr int kNumberChans = 2;

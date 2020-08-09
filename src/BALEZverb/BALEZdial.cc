@@ -43,5 +43,5 @@ void BalezDial::resized() {
 }
 
 void BalezDial::sliderValueChanged(juce::Slider *slider) {
-  parameter_->setValue(static_cast<float>(slider->getValue()));
+  parameter_->sendValueChangedMessageToListeners(slider->getValue());
 }

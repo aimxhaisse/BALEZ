@@ -2,32 +2,30 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
-class BalezProcessorBase : public juce::AudioProcessor {
+class BalezProcessorBase : public juce::AudioProcessor,
+                           public juce::AudioProcessorParameter::Listener {
 public:
-  BalezProcessorBase(const BusesProperties &layouts)
-      : juce::AudioProcessor(layouts) {}
+  BalezProcessorBase(const BusesProperties &layouts);
 
-  bool hasEditor() const override { return true; }
-  bool acceptsMidi() const override { return false; }
-  bool producesMidi() const override { return false; }
-  bool isMidiEffect() const override { return false; }
+  bool hasEditor() const override;
+  bool acceptsMidi() const override;
+  bool producesMidi() const override;
+  bool isMidiEffect() const override;
 
-  double getTailLengthSeconds() const override { return 0.0; }
+  double getTailLengthSeconds() const override;
 
-  int getNumPrograms() override { return 1; }
-  int getCurrentProgram() override { return 0; }
-  void setCurrentProgram(int) override {}
-  const juce::String getProgramName(int) override { return {}; }
-  void changeProgramName(int, const juce::String &) override {}
+  int getNumPrograms() override;
+  int getCurrentProgram() override;
+  void setCurrentProgram(int) override;
+  const juce::String getProgramName(int) override;
+  void changeProgramName(int, const juce::String &) override;
 
-  void getStateInformation(juce::MemoryBlock &dest) override {}
-  void setStateInformation(const void *data, int size) override {}
+  void getStateInformation(juce::MemoryBlock &dest) override;
+  void setStateInformation(const void *data, int size) override;
 
-  float getParameterValue(int index) {
-    return getParameters().getReference(index)->getValue();
-  }
+  void parameterValueChanged(int idx, float value) override;
+  void parameterGestureChanged(int idx, bool gesture) override;
 
-  void setParameterValue(int index, float value) {
-    return getParameters().getReference(index)->setValue(value);
-  }
+  float getParameterValue(int index);
+  void setParameterValue(int index, float value);
 };

@@ -39,6 +39,7 @@ juce_generate_juce_header(BALEZverb)
 target_sources(BALEZverb PRIVATE
     BALEZverb_editor.cc
     BALEZverb_processor.cc
+    BALEZprocessor_base.cc
     BALEZdial.cc
     BALEZdial_bar.cc)
 
