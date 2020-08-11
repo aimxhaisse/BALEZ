@@ -27,6 +27,10 @@ BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
   header_.setJustification(juce::Justification::left);
   addAndMakeVisible(header_);
 
+  // Order here needs to follow the order of the enum: the identifier
+  // created by addNewDial is incremental and is used to refer to the
+  // parameter. Not following the order here results in a crash or
+  // weird behaviour without warning.
   dial_bar_.addNewDial("Room", PARAM_ROOM);
   dial_bar_.addNewDial("Damping", PARAM_DAMPING);
   dial_bar_.addNewDial("Wet", PARAM_WET);
