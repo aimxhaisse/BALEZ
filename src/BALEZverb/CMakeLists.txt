@@ -7,8 +7,9 @@ endif()
 
 message(STATUS "version is set to 0.0.${BUILD_VERSION}")
 
-project(BALEZ_verb VERSION 0.0.${BUILD_VERSION})
+project(BALEZverb VERSION 0.0.${BUILD_VERSION})
 add_subdirectory(../../lib/JUCE lib/JUCE)
+include_directories(../)
 
 juce_add_plugin(BALEZverb
     # VERSION ...                               # Set this if the plugin version is different to the project version
@@ -23,8 +24,9 @@ juce_add_plugin(BALEZverb
     # COPY_PLUGIN_AFTER_BUILD TRUE/FALSE        # Should the plugin be installed to a default location after building?
     PLUGIN_MANUFACTURER_CODE BaLZ               # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE veRb                            # A unique four-character plugin id with at least one upper-case character
-    FORMATS AU                                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
-    PRODUCT_NAME "BALEZverb")                   # The name of the final executable, which can differ from the target name
+    FORMATS AU                                  # The formats to build. Other valid fo.mats are: AAX Unity VST AU AUv3
+    PRODUCT_NAME "BALEZverb"                    # The name of the final executable, which can differ from the target name
+)
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given
 # target, which will be generated into your build tree. This should be
@@ -39,9 +41,10 @@ juce_generate_juce_header(BALEZverb)
 target_sources(BALEZverb PRIVATE
     BALEZverb_editor.cc
     BALEZverb_processor.cc
-    BALEZprocessor_base.cc
-    BALEZdial.cc
-    BALEZdial_bar.cc)
+    ../BALEZ/BALEZprocessor_base.cc
+    ../BALEZ/BALEZdial.cc
+    ../BALEZ/BALEZdial_bar.cc
+)
 
 # `target_compile_definitions` adds some preprocessor definitions to
 # our target. In a Projucer project, these might be passed in the

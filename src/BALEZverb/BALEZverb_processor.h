@@ -2,7 +2,7 @@
 
 #include <mutex>
 
-#include "BALEZprocessor_base.h"
+#include "BALEZ/BALEZprocessor_base.h"
 
 enum {
   PARAM_ROOM = 0,

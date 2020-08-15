@@ -28,7 +28,6 @@ BalezVerbProcessor::BalezVerbProcessor()
 }
 
 BalezVerbProcessor::~BalezVerbProcessor() {}
-
 const juce::String BalezVerbProcessor::getName() const {
   return JucePlugin_Name;
 }

@@ -3,7 +3,7 @@
 #include <memory>
 #include <utility>
 
-#include "BALEZdial_bar.h"
+#include "BALEZ/BALEZdial_bar.h"
 #include "BALEZverb_processor.h"
 
 class BalezVerbEditor : public juce::AudioProcessorEditor {
