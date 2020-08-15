@@ -19,11 +19,7 @@ BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
   dial_bar_.setUp(*this);
   dial_bar_.setInitialPosition(0, header_.getHeight());
 
-  footer_.setColour(juce::Colours::white);
-  footer_.setFont(juce::Font(10.0f, juce::Font::plain), true);
-  footer_.setText(__DATE__ " - " __TIME__);
-  footer_.setJustification(juce::Justification::right);
-  addAndMakeVisible(footer_);
+  footer_.setUp(*this);
 
   setSize(kSizeWidth, kSizeHeight);
 }
@@ -37,8 +33,5 @@ void BalezVerbEditor::paint(juce::Graphics &gfx) {
 void BalezVerbEditor::resized() {
   header_.resized();
   dial_bar_.resized();
-
-  footer_.setBoundingBox(juce::Rectangle<float>(
-      kPaddingWidth, kHeaderHeight + kDialHeight + kPaddingHeight,
-      kSizeWidth - 2 * kPaddingWidth, kFooterHeight - 2 * kPaddingHeight));
+  footer_.resized();
 }

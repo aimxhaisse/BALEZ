@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "BALEZ/BALEZdial_bar.h"
+#include "BALEZ/BALEZfooter.h"
 #include "BALEZ/BALEZheader.h"
 #include "BALEZverb_processor.h"
 
@@ -18,7 +19,7 @@ public:
 private:
   BalezHeader header_;
   BalezDialBar dial_bar_;
-  juce::DrawableText footer_;
+  BalezFooter footer_;
 
   BalezVerbProcessor &proc_;
 };
