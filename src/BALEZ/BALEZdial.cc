@@ -1,4 +1,5 @@
 #include "BALEZdial.h"
+#include "BALEZ/BALEZconstants.h"
 
 BalezDial::BalezDial(const juce::String &name) : name_(name) {}
 
@@ -34,12 +35,12 @@ void BalezDial::setUp(juce::AudioProcessorEditor &editor) {
 }
 
 void BalezDial::resized() {
-  const int start_x = initial_x_ + index_ * kWidth;
+  const int start_x = initial_x_ + index_ * kDialWidth;
   const int start_y = initial_y_;
 
-  dial_->setBounds(start_x, start_y, kWidth, kDialHeight);
+  dial_->setBounds(start_x, start_y, kSizeWidth, kDialHeight);
   description_->setBoundingBox(juce::Rectangle<float>(
-      start_x, start_y + kDialHeight, kWidth, kTextHeight));
+      start_x, start_y + kDialHeight, kSizeWidth, kDialTextHeight));
 }
 
 void BalezDial::sliderValueChanged(juce::Slider *slider) {

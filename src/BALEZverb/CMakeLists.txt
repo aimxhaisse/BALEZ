@@ -44,6 +44,7 @@ target_sources(BALEZverb PRIVATE
     ../BALEZ/BALEZprocessor_base.cc
     ../BALEZ/BALEZdial.cc
     ../BALEZ/BALEZdial_bar.cc
+    ../BALEZ/BALEZheader.cc
 )
 
 # `target_compile_definitions` adds some preprocessor definitions to

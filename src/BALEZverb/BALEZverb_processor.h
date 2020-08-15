@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mutex>
-
 #include "BALEZ/BALEZprocessor_base.h"
 
 enum {

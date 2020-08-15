@@ -1,32 +1,12 @@
 #include "BALEZverb_editor.h"
+#include "BALEZ/BALEZconstants.h"
 #include "BALEZverb_processor.h"
-
-namespace {
-
-constexpr int kPaddingWidth = 15;
-constexpr int kPaddingHeight = 10;
-
-constexpr int kHeaderHeight = 20 + 2 * kPaddingWidth;
-constexpr int kFooterHeight = 10 + 2 * kPaddingHeight;
-
-constexpr int kDialTextHeight = 40;
-constexpr int kDialWidth = 100;
-constexpr int kDialHeight = kDialWidth + kDialTextHeight;
-
-constexpr int kSizeWidth = 600;
-constexpr int kSizeHeight = kHeaderHeight + kFooterHeight + kDialHeight;
-
-} // namespace
 
 BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
     : AudioProcessorEditor(&proc), proc_(proc) {
+  header_.setUp(*this, "BALEZverb");
 
-  header_.setColour(juce::Colours::white);
-  header_.setFont(juce::Font(25.0f, juce::Font::plain), true);
-  header_.setText("BALEZverb");
-  header_.setJustification(juce::Justification::left);
-  addAndMakeVisible(header_);
-
+  dial_bar_.setInitialPosition(0, header_.getHeight());
   // Order here needs to follow the order of the enum: the identifier
   // created by addNewDial is incremental and is used to refer to the
   // parameter. Not following the order here results in a crash or
@@ -55,10 +35,7 @@ void BalezVerbEditor::paint(juce::Graphics &gfx) {
 }
 
 void BalezVerbEditor::resized() {
-  header_.setBoundingBox(juce::Rectangle<float>(
-      kPaddingWidth, kPaddingHeight, kSizeWidth - 2 * kPaddingWidth,
-      kHeaderHeight - 2 * kPaddingHeight));
-
+  header_.resized();
   dial_bar_.resized();
 
   footer_.setBoundingBox(juce::Rectangle<float>(

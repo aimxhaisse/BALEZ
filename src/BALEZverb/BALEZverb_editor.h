@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "BALEZ/BALEZdial_bar.h"
+#include "BALEZ/BALEZheader.h"
 #include "BALEZverb_processor.h"
 
 class BalezVerbEditor : public juce::AudioProcessorEditor {
@@ -15,7 +16,7 @@ public:
   void resized() override;
 
 private:
-  juce::DrawableText header_;
+  BalezHeader header_;
   BalezDialBar dial_bar_;
   juce::DrawableText footer_;
 
