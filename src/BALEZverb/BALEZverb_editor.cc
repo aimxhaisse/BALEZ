@@ -6,7 +6,6 @@ BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
     : AudioProcessorEditor(&proc), proc_(proc) {
   header_.setUp(*this, "BALEZverb");
 
-  dial_bar_.setInitialPosition(0, header_.getHeight());
   // Order here needs to follow the order of the enum: the identifier
   // created by addNewDial is incremental and is used to refer to the
   // parameter. Not following the order here results in a crash or
@@ -18,6 +17,7 @@ BalezVerbEditor::BalezVerbEditor(BalezVerbProcessor &proc)
   dial_bar_.addNewDial("Width", PARAM_WIDTH);
   dial_bar_.addNewDial("Freeze", PARAM_FREEZE);
   dial_bar_.setUp(*this);
+  dial_bar_.setInitialPosition(0, header_.getHeight());
 
   footer_.setColour(juce::Colours::white);
   footer_.setFont(juce::Font(10.0f, juce::Font::plain), true);
